@@ -79,45 +79,81 @@
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/dark-v10',
             zoom: 12, // starting zoom
-            center: [-122.4194, 37.7749] // starting center
+            center: [-121.8853, 37.3387] // starting center
         });
 
         map.on('load', () => { //simplifying the function statement: arrow with brackets to define a function
 
-            map.addSource('sf-tiles', {
+            map.addSource('sj-tiles', {
                 'type': 'raster',
                 'tiles': [
-                    'assets/sf/{z}/{x}/{y}.png'
+                    'assets/sj/{z}/{x}/{y}.png'
                 ],
                 'tileSize': 256,
                 'attribution': 'Map tiles designed by Priscilla Nguyen</a>'
             });
 
-            map.addSource('obesity-tiles', {
+            map.addSource('solar-tiles', {
                 'type': 'raster',
                 'tiles': [
-                    'assets/obesity/{z}/{x}/{y}.png'
+                    'assets/solar/{z}/{x}/{y}.png'
                 ],
                 'tileSize': 256,
-                'attribution': 'Map tiles designed by Priscilla Nguyen</a>'
+                'attribution': 'Map tiles designed by Priscilla Nguyen'
+            });
+
+            map.addSource('sjsolar-tiles', {
+                'type': 'raster',
+                'tiles': [
+                    'assets/sjsolar/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Priscilla Nguyen'
+            });
+
+            map.addSource('lakes-tiles', {
+                'type': 'raster',
+                'tiles': [
+                    'assets/lakes/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Priscilla Nguyen'
             });
 
             map.addLayer({
-                'id': 'sf',
+                'id': 'sj',
                 'type': 'raster',
                 'layout': {
                     'visibility': 'none'
                 },
-                'source': 'sf-tiles'
+                'source': 'sj-tiles'
             });
 
             map.addLayer({
-                'id': 'obesity',
+                'id': 'solar',
                 'type': 'raster',
                 'layout': {
                     'visibility': 'none'
                 },
-                'source': 'obesity-tiles'
+                'source': 'solar-tiles'
+            });
+
+            map.addLayer({
+                'id': 'sjsolar',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'sjsolar-tiles'
+            });
+
+            map.addLayer({
+                'id': 'lakes',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'lakes-tiles'
             });
 
         });
@@ -126,12 +162,12 @@
         // After the last frame rendered before the map enters an "idle" state.
         map.on('idle', () => {
             // If these two layers were not added to the map, abort
-            if (!map.getLayer('sf', 'obesity')) {
+            if (!map.getLayer('sj') || !map.getLayer('solar') || !map.getLayer('sjsolar') || !map.getLayer('lakes'))  {
                 return;
             }
 
             // Enumerate ids of the layers.
-            const toggleableLayerIds = ['sf', 'obesity'];
+            const toggleableLayerIds = ['sj', 'solar', 'sjsolar', 'lakes'];
 
             // Set up the corresponding toggle button for each layer.
             for (const id of toggleableLayerIds) {
